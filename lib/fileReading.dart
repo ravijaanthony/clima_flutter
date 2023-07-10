@@ -129,66 +129,120 @@
 //   }
 // }
 
+// import 'package:flutter/material.dart';
+// import 'dart:convert';
+// import 'package:flutter/services.dart' show rootBundle;
+//
+// class FileReadingWeatherData {
+//   void FileReadingData() {
+//     fileReading();
+//   }
+//
+//   void fileReading() async {
+//     WidgetsFlutterBinding.ensureInitialized(); // Ensure Flutter framework is initialized
+//
+//     await loadCSV().then((csvDataList) {
+//       for (var row in csvDataList) {
+//         print('Code: ${row[0]}');
+//         print('Day: ${row[1]}');
+//         print('Icon: ${row[3]}');
+//         print('\n');
+//       }
+//
+//       runApp(MaterialApp(home: CSVReader(csvDataList: csvDataList)));
+//     }).catchError((e) {
+//       print('Error reading CSV file: $e');
+//     });
+//   }
+//
+//   Future<List<List<dynamic>>> loadCSV() async {
+//     try {
+//       String csvData = await rootBundle.loadString('assets/weather/weatherData.csv');
+//       List<String> csvList = LineSplitter().convert(csvData);
+//
+//       List<List<dynamic>> csvDataList = [];
+//
+//       for (var i = 0; i < csvList.length; i++) {
+//         List<dynamic> row = csvList[i].split(',');
+//         csvDataList.add(row);
+//       }
+//
+//       return csvDataList;
+//     } catch (e) {
+//       throw Exception('Error reading CSV file: $e');
+//     }
+//   }
+// }
+//
+// class CSVReader extends StatelessWidget {
+//   final List<List<dynamic>> csvDataList;
+//
+//   const CSVReader({required this.csvDataList});
+//
+//   @override
+//   Widget build(BuildContext context) {
+//     return Scaffold(
+//       appBar: AppBar(
+//         title: Text('CSV Reader'),
+//       ),
+//       body: ListView.builder(
+//         itemCount: csvDataList.length,
+//         itemBuilder: (context, index) {
+//           List<dynamic> row = csvDataList[index];
+//           return ListTile(
+//             title: Text(row[0]),
+//             subtitle: Text('${row[1]}, ${row[3]}'),
+//           );
+//         },
+//       ),
+//     );
+//   }
+// }
+
 import 'package:flutter/material.dart';
 import 'dart:convert';
 import 'package:flutter/services.dart' show rootBundle;
 
-void main() async {
-  WidgetsFlutterBinding.ensureInitialized(); // Ensure Flutter framework is initialized
+class FileReadingWeatherData {
+  late List<List<dynamic>> csvDataList;
 
-  await loadCSV().then((csvDataList) {
-    for (var row in csvDataList) {
-      print('Code: ${row[0]}');
-      print('Day: ${row[1]}');
-      print('Icon: ${row[3]}');
-      print('\n');
-    }
+  late String day;
+  late String icon;
 
-    runApp(MaterialApp(home: CSVReader(csvDataList: csvDataList)));
-  }).catchError((e) {
-    print('Error reading CSV file: $e');
-  });
-}
+  void fileReadingData() async {
+    WidgetsFlutterBinding.ensureInitialized(); // Ensure Flutter framework is initialized
 
-Future<List<List<dynamic>>> loadCSV() async {
-  try {
-    String csvData = await rootBundle.loadString('assets/weather/weatherData.csv');
-    List<String> csvList = LineSplitter().convert(csvData);
+    await loadCSV().then((loadedDataList) {
+      csvDataList = loadedDataList;
 
-    List<List<dynamic>> csvDataList = [];
-
-    for (var i = 0; i < csvList.length; i++) {
-      List<dynamic> row = csvList[i].split(',');
-      csvDataList.add(row);
-    }
-
-    return csvDataList;
-  } catch (e) {
-    throw Exception('Error reading CSV file: $e');
+      for (var row in csvDataList) {
+        print('Code: ${row[0]}');
+        day = row[1];
+        icon = row[3];
+        print('Day: $day');
+        print('Icon: $icon');
+        print('\n');
+      }
+    }).catchError((e) {
+      print('Error reading CSV file: $e');
+    });
   }
-}
 
-class CSVReader extends StatelessWidget {
-  final List<List<dynamic>> csvDataList;
+  Future<List<List<dynamic>>> loadCSV() async {
+    try {
+      String csvData = await rootBundle.loadString('assets/weather/weatherData.csv');
+      List<String> csvList = LineSplitter().convert(csvData);
 
-  const CSVReader({required this.csvDataList});
+      List<List<dynamic>> csvDataList = [];
 
-  @override
-  Widget build(BuildContext context) {
-    return Scaffold(
-      appBar: AppBar(
-        title: Text('CSV Reader'),
-      ),
-      body: ListView.builder(
-        itemCount: csvDataList.length,
-        itemBuilder: (context, index) {
-          List<dynamic> row = csvDataList[index];
-          return ListTile(
-            title: Text(row[0]),
-            subtitle: Text('${row[1]}, ${row[3]}'),
-          );
-        },
-      ),
-    );
+      for (var i = 0; i < csvList.length; i++) {
+        List<dynamic> row = csvList[i].split(',');
+        csvDataList.add(row);
+      }
+
+      return csvDataList;
+    } catch (e) {
+      throw Exception('Error reading CSV file: $e');
+    }
   }
 }

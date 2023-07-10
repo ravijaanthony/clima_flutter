@@ -2,6 +2,7 @@ import 'package:clima_flutter/services/weather.dart';
 import 'package:clima_flutter/services/weather_data.dart';
 import 'package:flutter/material.dart';
 
+import '../fileReading.dart';
 import '../utilities/constants.dart';
 // import 'package:clima_flutter/utilities/constants.dart';
 
@@ -36,11 +37,17 @@ class _LocationScreenState extends State<LocationScreen> {
     cityName = weatherData['location']['region'];
     var conditionNumber = weatherData['current']['condition']['code'];
     print("conditionNumber: " + conditionNumber.toString()); // --> FOR DEBUG
-    weatherIcon = weatherModel.getWeatherIcon(conditionNumber);
+    weatherIcon = weatherModel.getWeatherIcon(conditionNumber, 0);
 
     print("Reading WeatherData");
-    ReadWeatherData readWeatherData = ReadWeatherData();
-    readWeatherData.readWeatherData();
+
+    // WeatherModel weatherModel = WeatherModel();
+    weatherModel.readingWeatherData();
+
+    // ReadWeatherData readWeatherData = ReadWeatherData();
+    // FileReadingWeatherData readingWeatherData = FileReadingWeatherData();
+    // readingWeatherData.csvDataList;
+    // readWeatherData.readWeatherData();
   }
 
   @override

@@ -1,3 +1,4 @@
+import 'package:clima_flutter/fileReading.dart';
 import 'package:clima_flutter/services/weather_data.dart';
 import 'package:csv/csv.dart';
 import 'package:flutter/cupertino.dart';
@@ -10,21 +11,26 @@ class WeatherModel {
   String? weatherStatus;
   int? weatherIcon;
 
-  ReadWeatherData readWeatherData = ReadWeatherData();
+  FileReadingWeatherData fileReadingWeatherData = FileReadingWeatherData();
+  // for (file in fileReadingWeatherData.csvDataList)
+
+  // ReadWeatherData readWeatherData = ReadWeatherData();
   var weather;
 
   void readingWeatherData() {
-    for (weather in readWeatherData.weatherList) {
+    for (weather in fileReadingWeatherData.csvDataList) {
       weatherCode = weather['code'];
       weatherStatus = weather['day'];
       weatherIcon = weather['icon'];
+      // return (weatherCode,weatherStatus, weatherIcon);
     }
     // readWeatherData.
   }
 
-  Object? getWeatherIcon(int condition) {
+  Object? getWeatherIcon(int condition, int weatherCode) {
     print('Weather: ');
-    print(readWeatherData.weatherList);
+    // print(readWeatherData.weatherList);
+    // readingWeatherData(weatherCode)
     // print(weather);
     print('weatherCode: ' + weatherCode.toString());
 
